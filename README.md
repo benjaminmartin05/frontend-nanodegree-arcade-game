@@ -8,7 +8,7 @@ For detailed instructions on how to get started, check out this [guide](https://
 README.md should contain instructions on how to load and play the game (you will need to add those instructions).
 
 ## Instructions:
-* To load the game, open the index.html file in the p.3 folder.
+* To load the game, open the index.html file.
 * The directional pad (up, down, left, right) on your computer will be used to move your player during the game.
 * The player will not have the ability to move off the game board.
 
