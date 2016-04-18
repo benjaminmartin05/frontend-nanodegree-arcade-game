@@ -1,3 +1,4 @@
+"use strict";
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
@@ -35,14 +36,12 @@ Enemy.prototype.checkCollision = function(player) {
         player.x + 65 > this.x &&
         player.y < this.y + 50 &&
         70 + player.y > this.y) {
-        this.score--;
+        //TODO: this.score does not appear to be subtracting 1 from score total though,
+        //problem fixed by changing to player.score since 'this' was an enemy
+        player.score--;
         player.reset();
-        //updating the players score and attaching it to the newScore id in index.html
-        //TODO: this.score does not appear to be subtracting 1 from score total though
-        document.getElementById("newScore").innerHTML = player.score;
     }
 };
-
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -63,11 +62,13 @@ Player.prototype.update = function(dt) {
     //will be similar to that of enemy
     this.x * (dt);
     this.y * (dt);
+    //updates the players each time since prototype.update is a continous loop
+    document.getElementById("newScore").innerHTML = this.score;
 };
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+}
 
 function placeScoreDiv(x_pos, y_pos) {
     var d = document.getElementById('scoreDiv');
@@ -83,13 +84,13 @@ Player.prototype.handleInput = function(modifier) {
     if (modifier == 'left') {
         this.x -= 50;
     }
-    if (modifier == 'up') {
+    else if (modifier == 'up') {
         this.y -= 50;
     }
-    if (modifier == 'right') {
+    else if (modifier == 'right') {
         this.x += 50;
     }
-    if (modifier == 'down') {
+    else if (modifier == 'down') {
         this.y += 50;
     }
     //make something that doesn't allow player to move off the screen
@@ -111,10 +112,7 @@ Player.prototype.handleInput = function(modifier) {
     if (this.y <= 7) {
         this.score++;
         player.reset();
-        //updating the players score and attaching it to the newScore id in index.html
-        document.getElementById("newScore").innerHTML = player.score;
-        if (player.score === 2) {
-            //TODO: score is not resetting to 0 until player has hit a bug after "you win" alert appears
+        if (player.score === 5) {
             player.score = 0;
             alert("You Win");
         }
@@ -122,8 +120,8 @@ Player.prototype.handleInput = function(modifier) {
 };
 
 Player.prototype.reset = function() {
-    this.x = 200;
-    this.y = 380;
+    this.x = initial_x;
+    this.y = initial_y;
 };
 
 // Now instantiate your objects.
@@ -142,9 +140,10 @@ var enemyCreator = function(totalEnemies) {
 
 //run enemyCreator multiple times to make the game more challenging
 enemyCreator(2);
-
+var initial_x = 200;
+var initial_y = 380;
 // Place the player object in a variable called player
-var player = new Player(200, 380);
+var player = new Player(initial_x, initial_y);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
